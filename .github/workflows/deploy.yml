@@ -24,4 +24,6 @@ jobs:
             cd /var/www/html/flask-employee-app
             git pull origin main
             docker compose down
+            docker rm -f flask-employee-app || true
+
             docker compose up -d --build
