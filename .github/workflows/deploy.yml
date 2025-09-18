@@ -22,8 +22,12 @@ jobs:
           key: ${{ secrets.EC2KEY }}
           script: |
             cd /var/www/html/flask-employee-app
+            # Ensure repo is safe & owned by ubuntu
+            sudo chown -R ubuntu:ubuntu /var/www/html/flask-employee-app
+            git config --global --add safe.directory /var/www/html/flask-employee-app
+            git reset --hard
             git pull origin main
             docker compose down
             docker rm -f flask-employee-app || true
-
-            docker compose up -d --build
+            docker compose build --no-cache
+            docker compose up -d --force-recreate --remove-orphans
